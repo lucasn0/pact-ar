@@ -1,0 +1,17 @@
+{
+  "id": "mandato",
+  "nombre": "Mandato",
+  "descripcion": "Para autorizar a alguien a actuar en tu nombre en trámites o gestiones.",
+  "variables": [
+    { "id": "mandante_nombre", "label": "Nombre completo del mandante (quien autoriza)", "tipo": "texto" },
+    { "id": "mandante_dni", "label": "DNI del mandante", "tipo": "texto" },
+    { "id": "mandatario_nombre", "label": "Nombre completo del mandatario (quien actúa)", "tipo": "texto" },
+    { "id": "mandatario_dni", "label": "DNI del mandatario", "tipo": "texto" },
+    { "id": "objeto", "label": "Actos o gestiones autorizadas", "tipo": "textarea" },
+    { "id": "duracion", "label": "Duración del mandato", "tipo": "texto" },
+    { "id": "remuneracion", "label": "Remuneración (gratuito o monto)", "tipo": "texto" },
+    { "id": "lugar", "label": "Ciudad", "tipo": "texto" },
+    { "id": "fecha", "label": "Fecha", "tipo": "fecha" }
+  ],
+  "cuerpo": "CONTRATO DE MANDATO\n\nEn la ciudad de {{lugar}}, a los {{fecha}}, entre:\n\nMANDANTE: {{mandante_nombre}}, DNI {{mandante_dni}}, en adelante \"el Mandante\";\n\nMANDATARIO: {{mandatario_nombre}}, DNI {{mandatario_dni}}, en adelante \"el Mandatario\";\n\nSe acuerda el presente contrato de mandato bajo las siguientes cláusulas:\n\nPRIMERA — OBJETO: El Mandante encomienda al Mandatario la realización de los siguientes actos en su nombre y representación: {{objeto}}.\n\nSEGUNDA — DURACIÓN: El presente mandato tendrá vigencia por {{duracion}} a partir de la fecha de firma, pudiendo ser revocado en cualquier momento por el Mandante.\n\nTERCERA — REMUNERACIÓN: El presente mandato es {{remuneracion}}.\n\nCUARTA — OBLIGACIONES DEL MANDATARIO: El Mandatario se compromete a actuar con diligencia y lealtad, a rendir cuentas de su gestión y a no exceder los límites del mandato conferido.\n\nQUINTA — OBLIGACIONES DEL MANDANTE: El Mandante se compromete a proveer al Mandatario los recursos necesarios para el cumplimiento del mandato y a indemnizarlo por los gastos razonables que incurra.\n\nSEXTA — JURISDICCIÓN: Para cualquier controversia, las partes se someten a los tribunales ordinarios de la ciudad de {{lugar}}.\n\nEn prueba de conformidad, las partes firman el presente contrato.\n\n_______________________________\t\t_______________________________\n{{mandante_nombre}}\t\t\t\t{{mandatario_nombre}}\nMandante\t\t\t\t\tMandatario"
+}

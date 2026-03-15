@@ -1,0 +1,21 @@
+{
+  "id": "contrato-obra",
+  "nombre": "Contrato de obra",
+  "descripcion": "Para trabajos de construcción, refacción o cualquier obra material.",
+  "variables": [
+    { "id": "comitente_nombre", "label": "Nombre completo del comitente (quien encarga)", "tipo": "texto" },
+    { "id": "comitente_dni", "label": "DNI del comitente", "tipo": "texto" },
+    { "id": "contratista_nombre", "label": "Nombre completo del contratista (quien ejecuta)", "tipo": "texto" },
+    { "id": "contratista_dni", "label": "DNI del contratista", "tipo": "texto" },
+    { "id": "obra_descripcion", "label": "Descripción detallada de la obra", "tipo": "textarea" },
+    { "id": "obra_ubicacion", "label": "Ubicación de la obra", "tipo": "texto" },
+    { "id": "monto", "label": "Precio total de la obra", "tipo": "texto" },
+    { "id": "moneda", "label": "Moneda (ARS / USD)", "tipo": "texto" },
+    { "id": "forma_pago", "label": "Forma de pago (anticipo, cuotas, etc.)", "tipo": "textarea" },
+    { "id": "plazo", "label": "Plazo de ejecución", "tipo": "texto" },
+    { "id": "fecha_inicio", "label": "Fecha de inicio de la obra", "tipo": "fecha" },
+    { "id": "lugar", "label": "Ciudad", "tipo": "texto" },
+    { "id": "fecha", "label": "Fecha del contrato", "tipo": "fecha" }
+  ],
+  "cuerpo": "CONTRATO DE OBRA\n\nEn la ciudad de {{lugar}}, a los {{fecha}}, entre:\n\nCOMITENTE: {{comitente_nombre}}, DNI {{comitente_dni}}, en adelante \"el Comitente\";\n\nCONTRATISTA: {{contratista_nombre}}, DNI {{contratista_dni}}, en adelante \"el Contratista\";\n\nSe acuerda el presente contrato de obra bajo las siguientes cláusulas:\n\nPRIMERA — OBJETO: El Contratista se compromete a ejecutar la siguiente obra: {{obra_descripcion}}, ubicada en {{obra_ubicacion}}.\n\nSEGUNDA — PLAZO: La obra deberá estar terminada en un plazo de {{plazo}}, con inicio el {{fecha_inicio}}.\n\nTERCERA — PRECIO Y FORMA DE PAGO: El Comitente abonará la suma de {{moneda}} {{monto}}, de la siguiente manera: {{forma_pago}}.\n\nCUARTA — MATERIALES: Salvo pacto en contrario, los materiales necesarios para la ejecución de la obra estarán a cargo del Contratista.\n\nQUINTA — RESPONSABILIDAD: El Contratista responderá por los defectos de la obra durante un plazo de un año desde su recepción definitiva, conforme al art. 1273 del Código Civil y Comercial.\n\nSEXTA — MODIFICACIONES: Cualquier modificación al objeto o precio deberá acordarse por escrito entre las partes.\n\nSÉPTIMA — JURISDICCIÓN: Para cualquier controversia, las partes se someten a los tribunales ordinarios de la ciudad de {{lugar}}.\n\nEn prueba de conformidad, las partes firman el presente contrato.\n\n_______________________________\t\t_______________________________\n{{comitente_nombre}}\t\t\t\t{{contratista_nombre}}\nComitente\t\t\t\t\tContratista"
+}

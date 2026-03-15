@@ -1,0 +1,18 @@
+{
+  "id": "compraventa",
+  "nombre": "Compraventa",
+  "descripcion": "Transferencia de bienes muebles entre particulares.",
+  "variables": [
+    { "id": "vendedor_nombre", "label": "Nombre completo del vendedor", "tipo": "texto" },
+    { "id": "vendedor_dni", "label": "DNI del vendedor", "tipo": "texto" },
+    { "id": "comprador_nombre", "label": "Nombre completo del comprador", "tipo": "texto" },
+    { "id": "comprador_dni", "label": "DNI del comprador", "tipo": "texto" },
+    { "id": "bien_descripcion", "label": "Descripción del bien", "tipo": "textarea" },
+    { "id": "monto", "label": "Precio de venta", "tipo": "texto" },
+    { "id": "moneda", "label": "Moneda (ARS / USD)", "tipo": "texto" },
+    { "id": "forma_pago", "label": "Forma de pago", "tipo": "texto" },
+    { "id": "lugar", "label": "Ciudad", "tipo": "texto" },
+    { "id": "fecha", "label": "Fecha del contrato", "tipo": "fecha" }
+  ],
+  "cuerpo": "CONTRATO DE COMPRAVENTA\n\nEn la ciudad de {{lugar}}, a los {{fecha}}, entre:\n\nVENDEDOR: {{vendedor_nombre}}, DNI {{vendedor_dni}}, en adelante \"el Vendedor\";\n\nCOMPRADOR: {{comprador_nombre}}, DNI {{comprador_dni}}, en adelante \"el Comprador\";\n\nSe acuerda el presente contrato de compraventa bajo las siguientes cláusulas:\n\nPRIMERA — OBJETO: El Vendedor vende y transfiere al Comprador el siguiente bien: {{bien_descripcion}}.\n\nSEGUNDA — PRECIO: El precio acordado es de {{moneda}} {{monto}}, que el Comprador abonará de la siguiente manera: {{forma_pago}}.\n\nTERCERA — ENTREGA: El Vendedor entregará el bien al momento de recibir el pago total acordado, salvo pacto en contrario.\n\nCUARTA — GARANTÍAS: El Vendedor declara ser el legítimo propietario del bien, que el mismo se encuentra libre de gravámenes, embargos o cualquier otro impedimento legal para su transferencia.\n\nQUINTA — VICIOS OCULTOS: El Vendedor responderá por los vicios ocultos del bien conforme a la legislación vigente.\n\nSEXTA — JURISDICCIÓN: Para cualquier controversia, las partes se someten a los tribunales ordinarios de la ciudad de {{lugar}}.\n\nEn prueba de conformidad, las partes firman el presente contrato.\n\n_______________________________\t\t_______________________________\n{{vendedor_nombre}}\t\t\t\t{{comprador_nombre}}\nVendedor\t\t\t\t\tComprador"
+}

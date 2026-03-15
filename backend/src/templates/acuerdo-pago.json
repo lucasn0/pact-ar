@@ -1,0 +1,21 @@
+{
+  "id": "acuerdo-pago",
+  "nombre": "Acuerdo de pago",
+  "descripcion": "Para regularizar una deuda existente y establecer un plan de cuotas.",
+  "variables": [
+    { "id": "acreedor_nombre", "label": "Nombre completo del acreedor", "tipo": "texto" },
+    { "id": "acreedor_dni", "label": "DNI del acreedor", "tipo": "texto" },
+    { "id": "deudor_nombre", "label": "Nombre completo del deudor", "tipo": "texto" },
+    { "id": "deudor_dni", "label": "DNI del deudor", "tipo": "texto" },
+    { "id": "deuda_origen", "label": "Origen de la deuda", "tipo": "textarea" },
+    { "id": "monto_total", "label": "Monto total de la deuda", "tipo": "texto" },
+    { "id": "moneda", "label": "Moneda (ARS / USD)", "tipo": "texto" },
+    { "id": "cuotas", "label": "Cantidad de cuotas", "tipo": "texto" },
+    { "id": "monto_cuota", "label": "Monto de cada cuota", "tipo": "texto" },
+    { "id": "dia_pago", "label": "Día del mes en que se paga cada cuota", "tipo": "texto" },
+    { "id": "fecha_primera_cuota", "label": "Fecha de la primera cuota", "tipo": "fecha" },
+    { "id": "lugar", "label": "Ciudad", "tipo": "texto" },
+    { "id": "fecha", "label": "Fecha del acuerdo", "tipo": "fecha" }
+  ],
+  "cuerpo": "ACUERDO DE PAGO\n\nEn la ciudad de {{lugar}}, a los {{fecha}}, entre:\n\nACREEDOR: {{acreedor_nombre}}, DNI {{acreedor_dni}}, en adelante \"el Acreedor\";\n\nDEUDOR: {{deudor_nombre}}, DNI {{deudor_dni}}, en adelante \"el Deudor\";\n\nSe acuerda el siguiente plan de pago bajo las siguientes cláusulas:\n\nPRIMERA — RECONOCIMIENTO DE DEUDA: El Deudor reconoce adeudar al Acreedor la suma de {{moneda}} {{monto_total}}, originada en: {{deuda_origen}}.\n\nSEGUNDA — PLAN DE PAGO: Las partes acuerdan cancelar dicha deuda en {{cuotas}} cuotas de {{moneda}} {{monto_cuota}} cada una, pagaderas el día {{dia_pago}} de cada mes, con inicio el {{fecha_primera_cuota}}.\n\nTERCERA — MORA: En caso de incumplimiento de cualquier cuota, el Acreedor podrá exigir el pago de la totalidad del saldo adeudado de manera inmediata.\n\nCUARTA — CANCELACIÓN ANTICIPADA: El Deudor podrá cancelar anticipadamente la deuda sin penalidad, abonando el saldo restante en cualquier momento.\n\nQUINTA — JURISDICCIÓN: Para cualquier controversia, las partes se someten a los tribunales ordinarios de la ciudad de {{lugar}}.\n\nEn prueba de conformidad, las partes firman el presente acuerdo.\n\n_______________________________\t\t_______________________________\n{{acreedor_nombre}}\t\t\t\t{{deudor_nombre}}\nAcreedor\t\t\t\t\tDeudor"
+}

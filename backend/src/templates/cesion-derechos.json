@@ -1,0 +1,18 @@
+{
+  "id": "cesion-derechos",
+  "nombre": "Cesión de derechos",
+  "descripcion": "Para fotógrafos, diseñadores y desarrolladores que transfieren propiedad intelectual de su trabajo.",
+  "variables": [
+    { "id": "cedente_nombre", "label": "Nombre completo del cedente (autor)", "tipo": "texto" },
+    { "id": "cedente_dni", "label": "DNI del cedente", "tipo": "texto" },
+    { "id": "cesionario_nombre", "label": "Nombre completo o razón social del cesionario", "tipo": "texto" },
+    { "id": "cesionario_dni", "label": "DNI o CUIT del cesionario", "tipo": "texto" },
+    { "id": "obra_descripcion", "label": "Descripción de la obra o trabajo", "tipo": "textarea" },
+    { "id": "alcance", "label": "Alcance de la cesión (exclusiva / no exclusiva, territorio, etc.)", "tipo": "textarea" },
+    { "id": "monto", "label": "Contraprestación económica", "tipo": "texto" },
+    { "id": "moneda", "label": "Moneda (ARS / USD)", "tipo": "texto" },
+    { "id": "lugar", "label": "Ciudad", "tipo": "texto" },
+    { "id": "fecha", "label": "Fecha", "tipo": "fecha" }
+  ],
+  "cuerpo": "CONTRATO DE CESIÓN DE DERECHOS\n\nEn la ciudad de {{lugar}}, a los {{fecha}}, entre:\n\nCEDENTE: {{cedente_nombre}}, DNI {{cedente_dni}}, autor de la obra, en adelante \"el Cedente\";\n\nCESIONARIO: {{cesionario_nombre}}, DNI/CUIT {{cesionario_dni}}, en adelante \"el Cesionario\";\n\nSe acuerda el presente contrato de cesión de derechos bajo las siguientes cláusulas:\n\nPRIMERA — OBJETO: El Cedente cede al Cesionario los derechos patrimoniales sobre la siguiente obra: {{obra_descripcion}}.\n\nSEGUNDA — ALCANCE DE LA CESIÓN: La cesión comprende: {{alcance}}.\n\nTERCERA — CONTRAPRESTACIÓN: En contraprestación por la cesión, el Cesionario abonará al Cedente la suma de {{moneda}} {{monto}}.\n\nCUARTA — DERECHOS MORALES: El Cedente conserva los derechos morales sobre la obra conforme a la Ley 11.723 de Propiedad Intelectual.\n\nQUINTA — GARANTÍA: El Cedente garantiza ser el legítimo titular de los derechos cedidos y que la obra no infringe derechos de terceros.\n\nSEXTA — JURISDICCIÓN: Para cualquier controversia, las partes se someten a los tribunales ordinarios de la ciudad de {{lugar}}.\n\nEn prueba de conformidad, las partes firman el presente contrato.\n\n_______________________________\t\t_______________________________\n{{cedente_nombre}}\t\t\t\t{{cesionario_nombre}}\nCedente\t\t\t\t\t\tCesionario"
+}

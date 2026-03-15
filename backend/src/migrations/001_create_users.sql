@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS users (
+  id          SERIAL PRIMARY KEY,
+  email       VARCHAR(255) UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  plan        VARCHAR(20) NOT NULL DEFAULT 'free',
+  created_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);

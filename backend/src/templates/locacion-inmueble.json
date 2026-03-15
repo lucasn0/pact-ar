@@ -1,0 +1,21 @@
+{
+  "id": "locacion-inmueble",
+  "nombre": "Locación de inmueble",
+  "descripcion": "Contrato de alquiler de inmueble entre particulares.",
+  "variables": [
+    { "id": "locador_nombre", "label": "Nombre completo del locador (dueño)", "tipo": "texto" },
+    { "id": "locador_dni", "label": "DNI del locador", "tipo": "texto" },
+    { "id": "locatario_nombre", "label": "Nombre completo del locatario (inquilino)", "tipo": "texto" },
+    { "id": "locatario_dni", "label": "DNI del locatario", "tipo": "texto" },
+    { "id": "inmueble_direccion", "label": "Dirección del inmueble", "tipo": "texto" },
+    { "id": "inmueble_descripcion", "label": "Descripción del inmueble", "tipo": "textarea" },
+    { "id": "destino", "label": "Destino del inmueble (habitacional / comercial)", "tipo": "texto" },
+    { "id": "monto_mensual", "label": "Monto mensual del alquiler", "tipo": "texto" },
+    { "id": "moneda", "label": "Moneda (ARS / USD)", "tipo": "texto" },
+    { "id": "duracion", "label": "Duración del contrato", "tipo": "texto" },
+    { "id": "fecha_inicio", "label": "Fecha de inicio", "tipo": "fecha" },
+    { "id": "lugar", "label": "Ciudad", "tipo": "texto" },
+    { "id": "fecha", "label": "Fecha del contrato", "tipo": "fecha" }
+  ],
+  "cuerpo": "CONTRATO DE LOCACIÓN DE INMUEBLE\n\nEn la ciudad de {{lugar}}, a los {{fecha}}, entre:\n\nLOCADOR: {{locador_nombre}}, DNI {{locador_dni}}, en adelante \"el Locador\";\n\nLOCATARIO: {{locatario_nombre}}, DNI {{locatario_dni}}, en adelante \"el Locatario\";\n\nSe acuerda el presente contrato de locación bajo las siguientes cláusulas:\n\nPRIMERA — OBJETO: El Locador cede en locación al Locatario el inmueble ubicado en {{inmueble_direccion}}, con las siguientes características: {{inmueble_descripcion}}.\n\nSEGUNDA — DESTINO: El inmueble será destinado exclusivamente a uso {{destino}}.\n\nTERCERA — PRECIO: El Locatario abonará la suma de {{moneda}} {{monto_mensual}} mensuales, pagaderos por adelantado dentro de los primeros cinco días de cada mes.\n\nCUARTA — PLAZO: El presente contrato tendrá una duración de {{duracion}}, con inicio el {{fecha_inicio}}.\n\nQUINTA — ESTADO DEL INMUEBLE: El Locatario declara recibir el inmueble en buen estado de conservación y se compromete a devolverlo en igual condición al finalizar el contrato.\n\nSEXTA — PROHIBICIONES: Queda prohibida la cesión o sublocación del inmueble sin consentimiento escrito del Locador.\n\nSÉPTIMA — SERVICIOS: Los servicios de electricidad, gas, agua y expensas ordinarias estarán a cargo del Locatario durante la vigencia del contrato.\n\nOCTAVA — JURISDICCIÓN: Para cualquier controversia, las partes se someten a los tribunales ordinarios de la ciudad de {{lugar}}.\n\nEn prueba de conformidad, las partes firman el presente contrato.\n\n_______________________________\t\t_______________________________\n{{locador_nombre}}\t\t\t\t{{locatario_nombre}}\nLocador\t\t\t\t\t\tLocatario"
+}

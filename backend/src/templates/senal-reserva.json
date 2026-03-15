@@ -1,0 +1,19 @@
+{
+  "id": "senal-reserva",
+  "nombre": "Señal / Reserva",
+  "descripcion": "Para reservar un bien o servicio con un anticipo, con condiciones claras de devolución.",
+  "variables": [
+    { "id": "vendedor_nombre", "label": "Nombre completo del vendedor", "tipo": "texto" },
+    { "id": "vendedor_dni", "label": "DNI del vendedor", "tipo": "texto" },
+    { "id": "comprador_nombre", "label": "Nombre completo del comprador/reservante", "tipo": "texto" },
+    { "id": "comprador_dni", "label": "DNI del comprador/reservante", "tipo": "texto" },
+    { "id": "bien_descripcion", "label": "Descripción del bien o servicio reservado", "tipo": "textarea" },
+    { "id": "monto_senal", "label": "Monto de la señal", "tipo": "texto" },
+    { "id": "monto_total", "label": "Precio total acordado", "tipo": "texto" },
+    { "id": "moneda", "label": "Moneda (ARS / USD)", "tipo": "texto" },
+    { "id": "plazo_operacion", "label": "Plazo para concretar la operación", "tipo": "texto" },
+    { "id": "lugar", "label": "Ciudad", "tipo": "texto" },
+    { "id": "fecha", "label": "Fecha", "tipo": "fecha" }
+  ],
+  "cuerpo": "RECIBO DE SEÑAL Y RESERVA\n\nEn la ciudad de {{lugar}}, a los {{fecha}}, entre:\n\nVENDEDOR: {{vendedor_nombre}}, DNI {{vendedor_dni}}, en adelante \"el Vendedor\";\n\nRESERVANTE: {{comprador_nombre}}, DNI {{comprador_dni}}, en adelante \"el Reservante\";\n\nSe acuerda el presente recibo de señal bajo las siguientes cláusulas:\n\nPRIMERA — OBJETO: El Reservante entrega al Vendedor la suma de {{moneda}} {{monto_senal}} en concepto de señal para reservar: {{bien_descripcion}}.\n\nSEGUNDA — PRECIO TOTAL: El precio total acordado para la operación es de {{moneda}} {{monto_total}}, del cual la señal entregada forma parte.\n\nTERCERA — PLAZO: La operación deberá concretarse dentro de {{plazo_operacion}} a partir de la fecha del presente.\n\nCUARTA — CONDICIONES DE DEVOLUCIÓN: Si el Vendedor desistiera de la operación, deberá devolver al Reservante el doble de la señal recibida. Si el Reservante desistiera, perderá la señal entregada en favor del Vendedor, conforme al art. 1060 del Código Civil y Comercial.\n\nQUINTA — JURISDICCIÓN: Para cualquier controversia, las partes se someten a los tribunales ordinarios de la ciudad de {{lugar}}.\n\nEn prueba de conformidad, las partes firman el presente.\n\n_______________________________\t\t_______________________________\n{{vendedor_nombre}}\t\t\t\t{{comprador_nombre}}\nVendedor\t\t\t\t\tReservante"
+}
