@@ -17,12 +17,32 @@ export default function TemplatesPage() {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const ORDER = [
+    "servicios",
+    "locacion-inmueble",
+    "senal-reserva",
+    "compraventa",
+    "acuerdo-pago",
+    "cesion-derechos",
+    "confidencialidad",
+    "contrato-obra",
+    "acuerdo-socios",
+    "mandato",
+  ];
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) { router.push("/login"); return; }
 
     apiGet("/templates", token)
-      .then((data) => setTemplates(data.templates))
+      .then((data) => {
+        const sorted = [...data.templates].sort((a: Template, b: Template) => {
+          const ia = ORDER.indexOf(a.id);
+          const ib = ORDER.indexOf(b.id);
+          return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+        });
+        setTemplates(sorted);
+      })
       .catch(() => router.push("/login"))
       .finally(() => setLoading(false));
   }, [router]);
