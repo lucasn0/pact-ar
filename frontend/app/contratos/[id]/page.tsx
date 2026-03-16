@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { apiGet, apiPost } from "@/lib/api";
+import { apiGet, apiPost, apiDelete } from "@/lib/api";
 
 interface Contract {
   id: number;
@@ -30,6 +30,8 @@ export default function ContratoDetallePage() {
   const [inviteSuccess, setInviteSuccess] = useState(false);
   const [inviteError, setInviteError] = useState("");
 
+  const [actionLoading, setActionLoading] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) { router.push("/login"); return; }
@@ -40,31 +42,75 @@ export default function ContratoDetallePage() {
       .finally(() => setLoading(false));
   }, [id, router]);
 
-  async function handleInvite(e: React.FormEvent) {
-    e.preventDefault();
+async function handleEliminar() {
+    if (!confirm("¿Seguro que querés eliminar este contrato? Esta acción no se puede deshacer.")) return;
     const token = localStorage.getItem("token");
-    if (!token) return;
-
-    setInviting(true);
-    setInviteError("");
-
+    if (!token) { router.push("/login"); return; }
+    setActionLoading(true);
     try {
-      await apiPost("/signatures/invite", {
-        contract_id: Number(id),
-        firmante_nombre,
-        firmante_email,
-      });
-      setInviteSuccess(true);
-      setShowInvite(false);
-      // Recargar contrato para reflejar nuevo estado
+      await apiDelete(`/contracts/${id}`, token);
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Error al eliminar");
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  async function handleRevocar() {
+    if (!confirm("¿Seguro que querés revocar la invitación? El firmante no podrá usar el link que recibió.")) return;
+    const token = localStorage.getItem("token");
+    if (!token) { router.push("/login"); return; }
+    setActionLoading(true);
+    try {
+      await apiPost(`/contracts/${id}/revocar`, {});
       const data = await apiGet(`/contracts/${id}`, token);
       setContract(data.contract);
     } catch (err: unknown) {
-      setInviteError(err instanceof Error ? err.message : "Error al enviar la invitación");
+      alert(err instanceof Error ? err.message : "Error al revocar");
     } finally {
-      setInviting(false);
+      setActionLoading(false);
     }
   }
+
+  async function handleInvite(e: React.FormEvent) {
+  e.preventDefault();
+  const token = localStorage.getItem("token");
+  if (!token) { router.push("/login"); return; }
+
+  setInviting(true);
+  setInviteError("");
+
+  try {
+    console.log("Enviando invite a:", process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001");
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/signatures/invite`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        contract_id: Number(id),
+        firmante_nombre,
+        firmante_email,
+      }),
+    });
+    const data = await res.json();
+    console.log("Respuesta del backend:", data);
+    if (!res.ok) throw new Error(data.error);
+    setInviteSuccess(true);
+    setShowInvite(false);
+    const updated = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/contracts/${id}`, {
+      headers: { "Authorization": `Bearer ${token}` },
+    });
+    const updatedData = await updated.json();
+    setContract(updatedData.contract);
+  } catch (err: unknown) {
+    setInviteError(err instanceof Error ? err.message : "Error al enviar la invitación");
+  } finally {
+    setInviting(false);
+  }
+}
 
   if (loading || !contract) {
     return (
@@ -81,9 +127,9 @@ export default function ContratoDetallePage() {
   };
 
   const estadoStyle: Record<string, string> = {
-    borrador: "bg-[#F1EFE8] text-[#888780]",
-    pendiente_firma: "bg-amber-50 text-amber-700",
-    firmado: "bg-[#EAF3DE] text-[#2C5F2E]",
+    borrador: "bg-cream text-hint",
+    pendiente_firma: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
+    firmado: "bg-green-light text-green",
   };
 
   return (
@@ -122,24 +168,44 @@ export default function ContratoDetallePage() {
 
         {/* Invite success */}
         {inviteSuccess && (
-          <div className="bg-[#EAF3DE] border border-[#2C5F2E] px-5 py-4 mb-8">
-            <p className="text-sm text-[#2C5F2E]">Invitación enviada correctamente. El firmante recibirá un email con el link para firmar.</p>
+          <div className="bg-green-light border border-green px-5 py-4 mb-8">
+            <p className="text-sm text-green">Invitación enviada correctamente. El firmante recibirá un email con el link para firmar.</p>
           </div>
         )}
 
-        {/* Invite button or form */}
+        {/* Acciones según estado */}
         {contract.estado === "borrador" && !showInvite && (
-          <button
-            onClick={() => setShowInvite(true)}
-            style={{ display: "inline-block" }}
-            className="text-xs font-medium uppercase tracking-widest px-6 py-3 bg-ink text-cream hover:bg-green transition-colors mb-10"
-          >
-            Invitar a firmar
-          </button>
+          <div className="flex gap-3 mb-10">
+            <button
+              onClick={() => setShowInvite(true)}
+              className="text-xs font-medium uppercase tracking-widest px-6 py-3 bg-ink text-cream hover:bg-green transition-colors"
+            >
+              Invitar a firmar
+            </button>
+            <button
+              onClick={handleEliminar}
+              disabled={actionLoading}
+              className="text-xs font-medium uppercase tracking-widest px-6 py-3 border border-border text-muted hover:border-red-400 hover:text-red-600 transition-colors disabled:opacity-50"
+            >
+              Eliminar contrato
+            </button>
+          </div>
+        )}
+
+        {contract.estado === "pendiente_firma" && (
+          <div className="mb-10">
+            <button
+              onClick={handleRevocar}
+              disabled={actionLoading}
+              className="text-xs font-medium uppercase tracking-widest px-6 py-3 border border-border text-muted hover:border-red-400 hover:text-red-600 transition-colors disabled:opacity-50"
+            >
+              {actionLoading ? "Revocando..." : "Revocar invitación"}
+            </button>
+          </div>
         )}
 
         {showInvite && (
-          <form onSubmit={handleInvite} className="border border-border bg-white p-6 mb-10">
+          <form onSubmit={handleInvite} className="border border-border bg-surface p-6 mb-10">
             <p className="text-xs uppercase tracking-widest text-hint mb-5">Datos del firmante</p>
             <div className="space-y-4 mb-5">
               <div>
@@ -149,7 +215,7 @@ export default function ContratoDetallePage() {
                   value={firmante_nombre}
                   onChange={e => setFirmanteNombre(e.target.value)}
                   required
-                  className="w-full bg-[#F8F7F4] border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
+                  className="w-full bg-cream border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
                   placeholder="Juan Pérez"
                 />
               </div>
@@ -160,7 +226,7 @@ export default function ContratoDetallePage() {
                   value={firmante_email}
                   onChange={e => setFirmanteEmail(e.target.value)}
                   required
-                  className="w-full bg-[#F8F7F4] border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
+                  className="w-full bg-cream border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
                   placeholder="juan@email.com"
                 />
               </div>
@@ -186,7 +252,7 @@ export default function ContratoDetallePage() {
         )}
 
         {/* Contrato */}
-        <div className="bg-white border border-border p-10">
+        <div className="bg-surface border border-border p-10">
           {contract.cuerpo.split('\n').map((line, i) => {
             const isSigLine = line.includes('\t');
             if (isSigLine) {

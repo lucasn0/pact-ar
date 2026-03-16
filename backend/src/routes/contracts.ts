@@ -59,6 +59,35 @@ router.post("/", async (req: AuthRequest, res: Response): Promise<void> => {
   }
 });
 
+// POST /contracts/custom — crear contrato personalizado
+router.post("/custom", async (req: AuthRequest, res: Response): Promise<void> => {
+  const { nombre, cuerpo } = req.body;
+
+  if (!nombre || !cuerpo) {
+    res.status(400).json({ error: "nombre y cuerpo son requeridos" });
+    return;
+  }
+
+  const userCheck = await db.query("SELECT email_verified FROM users WHERE id = $1", [req.userId]);
+  if (!userCheck.rows[0]?.email_verified) {
+    res.status(403).json({ error: "Debés verificar tu email antes de crear contratos" });
+    return;
+  }
+
+  try {
+    const result = await db.query(
+      `INSERT INTO contracts (user_id, template_id, nombre, variables, cuerpo)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, template_id, nombre, estado, created_at`,
+      [req.userId, "personalizado", nombre, JSON.stringify({}), cuerpo]
+    );
+    res.status(201).json({ contract: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al guardar el contrato" });
+  }
+});
+
 // GET /contracts — listar contratos del usuario
 router.get("/", async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -93,6 +122,69 @@ router.get("/:id", async (req: AuthRequest, res: Response): Promise<void> => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error al obtener el contrato" });
+  }
+});
+
+// DELETE /contracts/:id — eliminar contrato en borrador
+router.delete("/:id", async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const result = await db.query(
+      `SELECT id, estado FROM contracts WHERE id = $1 AND user_id = $2`,
+      [req.params.id, req.userId]
+    );
+
+    if (result.rows.length === 0) {
+      res.status(404).json({ error: "Contrato no encontrado" });
+      return;
+    }
+
+    if (result.rows[0].estado !== "borrador") {
+      res.status(400).json({ error: "Solo se pueden eliminar contratos en borrador" });
+      return;
+    }
+
+    await db.query("DELETE FROM contracts WHERE id = $1", [req.params.id]);
+    res.json({ message: "Contrato eliminado" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al eliminar el contrato" });
+  }
+});
+
+// POST /contracts/:id/revocar — revocar invitación pendiente
+router.post("/:id/revocar", async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const result = await db.query(
+      `SELECT id, estado FROM contracts WHERE id = $1 AND user_id = $2`,
+      [req.params.id, req.userId]
+    );
+
+    if (result.rows.length === 0) {
+      res.status(404).json({ error: "Contrato no encontrado" });
+      return;
+    }
+
+    if (result.rows[0].estado !== "pendiente_firma") {
+      res.status(400).json({ error: "Solo se pueden revocar contratos pendientes de firma" });
+      return;
+    }
+
+    // Invalidar tokens de firma pendientes
+    await db.query(
+      `UPDATE signatures SET estado = 'revocado' WHERE contract_id = $1 AND estado = 'pendiente'`,
+      [req.params.id]
+    );
+
+    // Volver el contrato a borrador
+    await db.query(
+      `UPDATE contracts SET estado = 'borrador', updated_at = NOW() WHERE id = $1`,
+      [req.params.id]
+    );
+
+    res.json({ message: "Invitación revocada" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al revocar la invitación" });
   }
 });
 

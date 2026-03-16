@@ -22,9 +22,9 @@ interface User {
 
 function EstadoBadge({ estado }: { estado: string }) {
   const styles: Record<string, string> = {
-    borrador: "bg-[#F1EFE8] text-[#888780]",
-    pendiente_firma: "bg-amber-50 text-amber-700",
-    firmado: "bg-[#EAF3DE] text-[#2C5F2E]",
+    borrador: "bg-cream text-hint",
+    pendiente_firma: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
+    firmado: "bg-green-light text-green",
   };
   const labels: Record<string, string> = {
     borrador: "Borrador",
@@ -46,11 +46,14 @@ function formatFecha(iso: string) {
   });
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [contracts, setContracts] = useState<Contract[]>([]);
   const [loading, setLoading] = useState(true);
+  const [reenvioEstado, setReenvioEstado] = useState<"idle" | "cargando" | "enviado" | "error">("idle");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -60,6 +63,24 @@ export default function DashboardPage() {
       .catch(() => { localStorage.removeItem("token"); router.push("/login"); })
       .finally(() => setLoading(false));
   }, [router]);
+
+  async function reenviarVerificacion() {
+    if (!user?.email) return;
+    setReenvioEstado("cargando");
+    try {
+      const res = await fetch(`${API_URL}/auth/resend-verification`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: user.email }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setReenvioEstado("error"); return; }
+      console.log(data);
+      setReenvioEstado("enviado");
+    } catch {
+      setReenvioEstado("error");
+    }
+  }
 
   if (loading) {
     return (
@@ -104,7 +125,7 @@ export default function DashboardPage() {
         </div>
         <div className="flex justify-between items-center mb-12">
           <h1 className="font-serif text-4xl text-ink">Tus contratos</h1>
-          <Link href="/templates" style={{ display: "inline-block", background: "#1C1C1A", color: "#F8F7F4", padding: "12px 24px", fontSize: "11px", fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", textDecoration: "none" }}>
+          <Link href="/templates" className="inline-block bg-ink text-cream px-6 py-3 text-[11px] font-medium tracking-[0.1em] uppercase hover:bg-green transition-colors">
             + Nuevo contrato
           </Link>
         </div>
@@ -113,10 +134,21 @@ export default function DashboardPage() {
         {user?.plan === "free" && <UpgradeBanner />}
 
         {!user?.email_verified && (
-          <div className="bg-amber-50 border border-amber-200 px-6 py-4 mb-8">
-            <p className="text-sm text-amber-700">
-              Verificá tu email para poder crear contratos. Revisá tu casilla de correo.
+          <div className="bg-amber-100 border border-amber-300 dark:bg-amber-950 dark:border-amber-800 px-6 py-4 mb-8 flex items-center justify-between gap-4">
+            <p className="text-sm text-amber-800 dark:text-amber-300">
+              {reenvioEstado === "enviado"
+                ? "Email enviado. Revisá tu bandeja de entrada (y el spam)."
+                : "Tu email no está verificado. Verificalo para poder crear contratos."}
             </p>
+            {reenvioEstado !== "enviado" && (
+              <button
+                onClick={reenviarVerificacion}
+                disabled={reenvioEstado === "cargando"}
+                className="text-xs font-medium uppercase tracking-widest px-4 py-2 bg-amber-700 dark:bg-amber-800 text-white hover:bg-amber-900 transition-colors disabled:opacity-50 whitespace-nowrap"
+              >
+                {reenvioEstado === "cargando" ? "Enviando..." : reenvioEstado === "error" ? "Reintentar" : "Reenviar email"}
+              </button>
+            )}
           </div>
         )}
 
@@ -127,7 +159,7 @@ export default function DashboardPage() {
             { label: "Firmados", value: firmados },
             { label: "Pendientes", value: pendientes },
           ].map(s => (
-            <div key={s.label} className="bg-white border border-border p-6">
+            <div key={s.label} className="bg-surface border border-border p-6">
               <p className="text-xs uppercase tracking-widest text-hint mb-3">{s.label}</p>
               <p className="font-serif text-4xl text-ink">{s.value}</p>
             </div>
@@ -136,7 +168,7 @@ export default function DashboardPage() {
 
         {/* Empty state */}
         {contracts.length === 0 && (
-            <div className="bg-white border border-border text-center" style={{ padding: "64px 64px 48px 64px" }}>
+            <div className="bg-surface border border-border text-center" style={{ padding: "64px 64px 48px 64px" }}>
             <p className="font-serif text-2xl text-ink mb-3">Todavía no tenés contratos</p>
             <p className="text-sm text-muted font-light mb-8">
               Elegí un template y creá tu primer contrato en minutos.
@@ -155,7 +187,7 @@ export default function DashboardPage() {
 
         {/* Table */}
         {contracts.length > 0 && (
-          <div className="bg-white border border-border overflow-hidden">
+          <div className="bg-surface border border-border overflow-hidden">
             <table className="w-full table-fixed">
               <colgroup>
                 <col className="w-[40%]" />

@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import crypto from "crypto";
 import { db } from "../db";
 import { authMiddleware, AuthRequest } from "../middleware/auth";
-import { sendSignatureRequest, sendSignatureConfirmation } from "../services/email";
+import { sendSignatureRequest, sendSignatureConfirmation, sendSignatureNotificationToEmisor } from "../services/email";
 
 const router = Router();
 
@@ -50,17 +50,27 @@ router.post("/invite", authMiddleware, async (req: AuthRequest, res: Response): 
     );
 
     // Enviar email
-    await sendSignatureRequest({
-      firmante_email,
-      firmante_nombre,
-      emisor_email,
-      contrato_nombre: contract.nombre,
-      token,
-    });
+    try {
+      await sendSignatureRequest({
+        firmante_email,
+        firmante_nombre,
+        emisor_email,
+        contrato_nombre: contract.nombre,
+        token,
+      });
+    } catch (emailErr) {
+      console.error("[signatures/invite] Fallo al enviar email:", emailErr);
+      // La firma quedó guardada en DB; devolver error con detalle
+      res.status(500).json({
+        error: "Invitación guardada pero el email no pudo enviarse",
+        detail: emailErr instanceof Error ? emailErr.message : String(emailErr),
+      });
+      return;
+    }
 
     res.json({ message: "Invitación enviada correctamente" });
   } catch (err) {
-    console.error(err);
+    console.error("[signatures/invite] Error inesperado:", err);
     res.status(500).json({ error: "Error al enviar la invitación" });
   }
 });
@@ -107,9 +117,10 @@ router.post("/firmar/:token", async (req: Request, res: Response): Promise<void>
   try {
     const result = await db.query(
       `SELECT s.id, s.firmante_nombre, s.firmante_email, s.estado, s.contract_id,
-              c.nombre
+              c.nombre, u.email AS emisor_email
        FROM signatures s
        JOIN contracts c ON s.contract_id = c.id
+       JOIN users u ON c.user_id = u.id
        WHERE s.token = $1`,
       [req.params.token]
     );
@@ -138,16 +149,32 @@ router.post("/firmar/:token", async (req: Request, res: Response): Promise<void>
       [sig.contract_id]
     );
 
-    // Enviar confirmación al firmante
-    await sendSignatureConfirmation({
-      email: sig.firmante_email,
-      nombre: sig.firmante_nombre,
-      contrato_nombre: sig.nombre,
-    });
+    // Enviar confirmación al firmante (no bloquear si falla)
+    try {
+      await sendSignatureConfirmation({
+        email: sig.firmante_email,
+        nombre: sig.firmante_nombre,
+        contrato_nombre: sig.nombre,
+      });
+    } catch (emailErr) {
+      console.error("[signatures/firmar] Fallo al enviar confirmación al firmante:", emailErr);
+    }
+
+    // Notificar al emisor que su contrato fue firmado (no bloquear si falla)
+    try {
+      await sendSignatureNotificationToEmisor({
+        emisor_email: sig.emisor_email,
+        firmante_nombre: sig.firmante_nombre,
+        firmante_email: sig.firmante_email,
+        contrato_nombre: sig.nombre,
+      });
+    } catch (emailErr) {
+      console.error("[signatures/firmar] Fallo al notificar al emisor:", emailErr);
+    }
 
     res.json({ message: "Contrato firmado correctamente" });
   } catch (err) {
-    console.error(err);
+    console.error("[signatures/firmar] Error inesperado:", err);
     res.status(500).json({ error: "Error al registrar la firma" });
   }
 });

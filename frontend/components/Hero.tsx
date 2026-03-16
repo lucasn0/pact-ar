@@ -42,9 +42,9 @@ export default function Hero() {
       {/* Right — contract card mockup */}
       <div className="relative">
         {/* Shadow card */}
-        <div className="absolute -top-1.5 -left-1.5 right-1.5 bottom-1.5 border border-border bg-[#EEE] -z-10" />
+        <div className="absolute -top-1.5 -left-1.5 right-1.5 bottom-1.5 border border-border bg-border -z-10" />
 
-        <div className="bg-white border border-border p-8">
+        <div className="bg-surface border border-border p-8">
           <div className="flex justify-between items-start mb-6">
             <span className="text-[0.65rem] uppercase tracking-widest text-hint">
               Locación de servicios

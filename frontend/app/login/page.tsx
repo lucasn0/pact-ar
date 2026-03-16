@@ -59,7 +59,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-white border border-border px-4 py-3 text-sm text-ink placeholder:text-hint focus:outline-none focus:border-ink transition-colors"
+                className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink placeholder:text-hint focus:outline-none focus:border-ink transition-colors"
                 placeholder="tu@email.com"
               />
             </div>
@@ -73,7 +73,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-white border border-border px-4 py-3 text-sm text-ink placeholder:text-hint focus:outline-none focus:border-ink transition-colors"
+                className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink placeholder:text-hint focus:outline-none focus:border-ink transition-colors"
                 placeholder="········"
               />
             </div>
@@ -95,6 +95,11 @@ export default function LoginPage() {
             ¿No tenés cuenta?{" "}
             <Link href="/registro" className="text-ink underline underline-offset-4 hover:text-green transition-colors">
               Registrate gratis
+            </Link>
+          </p>
+          <p className="text-sm text-muted mt-3 text-center">
+            <Link href="/olvide-contrasena" className="text-hint hover:text-ink underline underline-offset-4 transition-colors">
+              Olvidé mi contraseña
             </Link>
           </p>
         </div>

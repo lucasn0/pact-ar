@@ -19,7 +19,7 @@ export default function UpgradeBanner() {
   }
 
   return (
-    <div className="border border-border bg-white px-8 py-6 mb-8 flex justify-between items-center">
+    <div className="border border-border bg-surface px-8 py-6 mb-8 flex justify-between items-center">
       <div>
         <p className="text-sm font-medium text-ink mb-1">Estás en el plan Free</p>
         <p className="text-xs text-muted font-light">Limitado a 3 contratos por mes. Actualizá para contratos ilimitados.</p>

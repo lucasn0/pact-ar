@@ -51,10 +51,19 @@ export default function VerificarPage() {
 
       {estado === "error" && (
         <>
-          <p className="font-serif text-2xl text-ink">Link inválido</p>
-          <p className="text-sm text-muted">El link ya fue usado o expiró.</p>
-          <Link href="/login" className="text-sm text-green underline underline-offset-4 mt-2">
-            Ir al login
+          <p className="font-serif text-2xl text-ink">Link inválido o expirado</p>
+          <p className="text-sm text-muted text-center max-w-sm">
+            El link ya fue usado o expiró. Podés solicitar uno nuevo desde la página de verificación.
+          </p>
+          <Link
+            href="/verificar-pendiente"
+            className="text-xs font-medium uppercase tracking-widest px-6 py-3 bg-ink text-cream hover:bg-green transition-colors mt-2"
+            style={{ display: "inline-block" }}
+          >
+            Reenviar link
+          </Link>
+          <Link href="/login" className="text-sm text-green underline underline-offset-4">
+            Ya tengo cuenta verificada
           </Link>
         </>
       )}

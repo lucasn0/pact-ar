@@ -104,7 +104,7 @@ export default function FirmarPage() {
         </p>
 
         {/* Contrato */}
-        <div className="bg-white border border-border p-10 mb-10">
+        <div className="bg-surface border border-border p-10 mb-10">
           {data?.cuerpo.split('\n').map((line, i) => {
             const isSigLine = line.includes('\t');
             if (isSigLine) {

@@ -52,7 +52,7 @@ export default function Pricing() {
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className={`flex flex-col p-8 bg-white border transition-colors ${
+            className={`flex flex-col p-8 bg-surface border transition-colors ${
               plan.featured ? "border-ink" : "border-border"
             }`}
           >

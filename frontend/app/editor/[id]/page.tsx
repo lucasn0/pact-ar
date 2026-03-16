@@ -70,8 +70,8 @@ export default function EditorPage() {
     setError("");
 
     try {
-      await apiPost("/contracts", { template_id: templateId, nombre, variables: values });
-      router.push("/dashboard");
+      const data = await apiPost("/contracts", { template_id: templateId, nombre, variables: values });
+      router.push(`/contratos/${data.contract.id}`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Error al guardar");
     } finally {
@@ -120,7 +120,7 @@ export default function EditorPage() {
               type="text"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              className="w-full bg-white border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
+              className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
               placeholder="Ej: Contrato con cliente ABC"
             />
           </div>
@@ -139,14 +139,14 @@ export default function EditorPage() {
                     value={values[v.id] || ""}
                     onChange={(e) => handleChange(v.id, e.target.value)}
                     rows={3}
-                    className="w-full bg-white border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors resize-none"
+                    className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors resize-none"
                   />
                 ) : (
                   <input
                     type={v.tipo === "fecha" ? "date" : "text"}
                     value={values[v.id] || ""}
                     onChange={(e) => handleChange(v.id, e.target.value)}
-                    className="w-full bg-white border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
+                    className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
                   />
                 )}
               </div>
@@ -166,7 +166,7 @@ export default function EditorPage() {
 
         {/* Right — preview */}
         {/* Right — preview */}
-        <div className="overflow-y-auto px-10 py-10 bg-white">
+        <div className="overflow-y-auto px-10 py-10 bg-surface">
           <p className="text-xs uppercase tracking-widest text-hint mb-6">Vista previa</p>
           {preview.split('\n').map((line, i) => {
             const isSigLine = line.includes('\t');

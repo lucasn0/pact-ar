@@ -61,7 +61,7 @@ export default function TemplatesPage() {
             <Link
               key={t.id}
               href={`/editor/${t.id}`}
-              className="group bg-white border border-border p-6 hover:border-ink transition-colors"
+              className="group bg-surface border border-border p-6 hover:border-ink transition-colors"
             >
               <h3 className="font-serif text-lg text-ink mb-2 group-hover:text-green transition-colors">
                 {t.nombre}
@@ -74,6 +74,22 @@ export default function TemplatesPage() {
               </span>
             </Link>
           ))}
+
+          {/* Card personalizado */}
+          <Link
+            href="/editor/personalizado"
+            className="group bg-surface border border-dashed border-border p-6 hover:border-ink transition-colors"
+          >
+            <h3 className="font-serif text-lg text-ink mb-2 group-hover:text-green transition-colors">
+              Contrato personalizado
+            </h3>
+            <p className="text-sm text-muted font-light leading-relaxed mb-4">
+              Escribí o pegá el texto de tu propio contrato desde cero, sin usar un template.
+            </p>
+            <span className="text-xs uppercase tracking-widest text-hint">
+              Editor libre →
+            </span>
+          </Link>
         </div>
       </div>
     </div>
