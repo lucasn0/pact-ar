@@ -38,7 +38,7 @@ export default function TemplatesPage() {
   return (
     <div className="min-h-screen bg-cream">
       {/* Header */}
-      <div className="px-12 py-5 border-b border-border flex justify-between items-center">
+      <div className="px-4 sm:px-12 py-5 border-b border-border flex justify-between items-center">
         <Link href="/" className="font-serif text-xl tracking-tight text-ink">
           pact<span className="text-green">.ar</span>
         </Link>
@@ -47,16 +47,16 @@ export default function TemplatesPage() {
         </Link>
       </div>
 
-      <div className="max-w-4xl mx-auto px-12 py-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-12 py-8 sm:py-16">
         <div className="flex items-center gap-2 mb-6">
           <span className="w-6 h-px bg-green" />
           <span className="text-xs font-medium uppercase tracking-widest text-green">
             Biblioteca
           </span>
         </div>
-        <h1 className="font-serif text-4xl text-ink mb-12">Elegí un tipo de contrato</h1>
+        <h1 className="font-serif text-3xl sm:text-4xl text-ink mb-8 sm:mb-12">Elegí un tipo de contrato</h1>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {templates.map((t) => (
             <Link
               key={t.id}

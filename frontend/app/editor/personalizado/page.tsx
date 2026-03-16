@@ -50,22 +50,22 @@ export default function EditorPersonalizadoPage() {
   return (
     <div className="min-h-screen bg-cream">
       {/* Header */}
-      <div className="px-12 py-5 border-b border-border flex justify-between items-center bg-cream">
+      <div className="px-4 sm:px-12 py-5 border-b border-border flex justify-between items-center bg-cream">
         <Link href="/" className="font-serif text-xl tracking-tight text-ink">
           pact<span className="text-green">.ar</span>
         </Link>
         <Link href="/templates" className="text-sm text-muted hover:text-ink transition-colors">
-          ← Volver a templates
+          ← Volver
         </Link>
       </div>
 
-      <div className="max-w-4xl mx-auto px-12 py-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-12 py-8 sm:py-16">
         <div className="flex items-center gap-2 mb-4">
           <span className="block w-6 h-px bg-green" />
           <span className="text-xs font-medium uppercase tracking-widest text-green">Personalizado</span>
         </div>
-        <h1 className="font-serif text-3xl text-ink mb-2">Contrato personalizado</h1>
-        <p className="text-sm text-muted font-light mb-10">
+        <h1 className="font-serif text-2xl sm:text-3xl text-ink mb-2">Contrato personalizado</h1>
+        <p className="text-sm text-muted font-light mb-8 sm:mb-10">
           Escribí o pegá el contenido de tu contrato. Podés usar cualquier formato.
         </p>
 
@@ -92,7 +92,7 @@ export default function EditorPersonalizadoPage() {
             value={cuerpo}
             onChange={e => setCuerpo(e.target.value)}
             rows={20}
-            className="w-full bg-surface border border-border px-6 py-5 text-sm text-ink font-mono leading-relaxed focus:outline-none focus:border-ink transition-colors resize-none"
+            className="w-full bg-surface border border-border px-4 sm:px-6 py-4 sm:py-5 text-sm text-ink font-mono leading-relaxed focus:outline-none focus:border-ink transition-colors resize-none"
             placeholder="Escribí o pegá el texto de tu contrato acá..."
           />
         </div>
@@ -100,7 +100,7 @@ export default function EditorPersonalizadoPage() {
         {/* Firmantes */}
         <div className="border-t border-border pt-8 mb-8">
           <p className="text-xs uppercase tracking-widest text-hint mb-6">Firmantes</p>
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             <div>
               <label className="block text-xs uppercase tracking-widest text-hint mb-2">
                 Nombre — Parte A
@@ -137,7 +137,7 @@ export default function EditorPersonalizadoPage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="text-xs font-medium uppercase tracking-widest px-8 py-3 bg-ink text-cream hover:bg-green transition-colors disabled:opacity-50"
+          className="w-full sm:w-auto text-xs font-medium uppercase tracking-widest px-8 py-3 bg-ink text-cream hover:bg-green transition-colors disabled:opacity-50"
         >
           {saving ? "Guardando..." : "Guardar contrato"}
         </button>

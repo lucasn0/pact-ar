@@ -31,6 +31,7 @@ export default function EditorPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [mobileTab, setMobileTab] = useState<"form" | "preview">("form");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -87,105 +88,131 @@ export default function EditorPage() {
     );
   }
 
+  const PreviewContent = () => (
+    <>
+      <p className="text-xs uppercase tracking-widest text-hint mb-6">Vista previa</p>
+      {preview.split('\n').map((line, i) => {
+        const isSigLine = line.includes('\t');
+        if (isSigLine) {
+          const cols = line.split('\t').filter(s => s.trim() !== '');
+          return (
+            <div key={i} className="grid grid-cols-2 gap-4 mt-1">
+              {cols.map((col, j) => (
+                <span key={j} className="font-mono text-sm text-ink">{col}</span>
+              ))}
+            </div>
+          );
+        }
+        return (
+          <p key={i} className={`font-mono text-sm text-ink ${line === '' ? 'mt-4' : 'mt-0'} leading-relaxed`}>
+            {line || '\u00A0'}
+          </p>
+        );
+      })}
+    </>
+  );
+
+  const FormContent = () => (
+    <>
+      <div className="flex items-center gap-2 mb-4">
+        <span className="w-6 h-px bg-green" />
+        <span className="text-xs font-medium uppercase tracking-widest text-green">Editor</span>
+      </div>
+      <h1 className="font-serif text-2xl text-ink mb-1">{template.nombre}</h1>
+      <p className="text-sm text-muted font-light mb-8">{template.descripcion}</p>
+
+      <div className="mb-6">
+        <label className="block text-xs uppercase tracking-widest text-hint mb-2">
+          Nombre del contrato
+        </label>
+        <input
+          type="text"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
+          placeholder="Ej: Contrato con cliente ABC"
+        />
+      </div>
+
+      <hr className="border-border mb-6" />
+
+      <div className="space-y-5">
+        {template.variables.map((v) => (
+          <div key={v.id}>
+            <label className="block text-xs uppercase tracking-widest text-hint mb-2">
+              {v.label}
+            </label>
+            {v.tipo === "textarea" ? (
+              <textarea
+                value={values[v.id] || ""}
+                onChange={(e) => handleChange(v.id, e.target.value)}
+                rows={3}
+                className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors resize-none"
+              />
+            ) : (
+              <input
+                type={v.tipo === "fecha" ? "date" : "text"}
+                value={values[v.id] || ""}
+                onChange={(e) => handleChange(v.id, e.target.value)}
+                className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {error && <p className="text-xs text-red-600 mt-4">{error}</p>}
+
+      <button
+        onClick={handleSave}
+        disabled={saving || !nombre}
+        className="w-full mt-8 bg-ink text-cream text-xs font-medium uppercase tracking-widest py-3 hover:bg-green transition-colors disabled:opacity-50"
+      >
+        {saving ? "Guardando..." : "Guardar contrato"}
+      </button>
+    </>
+  );
+
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-cream flex flex-col">
       {/* Header */}
-      <div className="px-12 py-5 border-b border-border flex justify-between items-center">
+      <div className="px-4 sm:px-12 py-5 border-b border-border flex justify-between items-center flex-shrink-0">
         <Link href="/" className="font-serif text-xl tracking-tight text-ink">
           pact<span className="text-green">.ar</span>
         </Link>
         <Link href="/templates" className="text-sm text-muted hover:text-ink transition-colors">
-          ← Volver a templates
+          ← Volver
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 h-[calc(100vh-65px)]">
-        {/* Left — formulario */}
+      {/* Mobile tabs */}
+      <div className="sm:hidden flex border-b border-border flex-shrink-0">
+        <button
+          onClick={() => setMobileTab("form")}
+          className={`flex-1 py-3 text-xs uppercase tracking-widest transition-colors ${mobileTab === "form" ? "text-ink border-b-2 border-ink font-medium" : "text-hint"}`}
+        >
+          Formulario
+        </button>
+        <button
+          onClick={() => setMobileTab("preview")}
+          className={`flex-1 py-3 text-xs uppercase tracking-widest transition-colors ${mobileTab === "preview" ? "text-ink border-b-2 border-ink font-medium" : "text-hint"}`}
+        >
+          Vista previa
+        </button>
+      </div>
+
+      {/* Mobile content */}
+      <div className="sm:hidden flex-1 overflow-y-auto px-4 py-8 bg-cream">
+        {mobileTab === "form" ? <FormContent /> : <div className="bg-surface p-4"><PreviewContent /></div>}
+      </div>
+
+      {/* Desktop split view */}
+      <div className="hidden sm:grid grid-cols-2 flex-1" style={{ height: "calc(100vh - 65px)" }}>
         <div className="border-r border-border overflow-y-auto px-10 py-10">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-6 h-px bg-green" />
-            <span className="text-xs font-medium uppercase tracking-widest text-green">
-              Editor
-            </span>
-          </div>
-          <h1 className="font-serif text-2xl text-ink mb-1">{template.nombre}</h1>
-          <p className="text-sm text-muted font-light mb-8">{template.descripcion}</p>
-
-          {/* Nombre del contrato */}
-          <div className="mb-6">
-            <label className="block text-xs uppercase tracking-widest text-hint mb-2">
-              Nombre del contrato
-            </label>
-            <input
-              type="text"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
-              placeholder="Ej: Contrato con cliente ABC"
-            />
-          </div>
-
-          <hr className="border-border mb-6" />
-
-          {/* Variables */}
-          <div className="space-y-5">
-            {template.variables.map((v) => (
-              <div key={v.id}>
-                <label className="block text-xs uppercase tracking-widest text-hint mb-2">
-                  {v.label}
-                </label>
-                {v.tipo === "textarea" ? (
-                  <textarea
-                    value={values[v.id] || ""}
-                    onChange={(e) => handleChange(v.id, e.target.value)}
-                    rows={3}
-                    className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors resize-none"
-                  />
-                ) : (
-                  <input
-                    type={v.tipo === "fecha" ? "date" : "text"}
-                    value={values[v.id] || ""}
-                    onChange={(e) => handleChange(v.id, e.target.value)}
-                    className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-
-          {error && <p className="text-xs text-red-600 mt-4">{error}</p>}
-
-          <button
-            onClick={handleSave}
-            disabled={saving || !nombre}
-            className="w-full mt-8 bg-ink text-cream text-xs font-medium uppercase tracking-widest py-3 hover:bg-green transition-colors disabled:opacity-50"
-          >
-            {saving ? "Guardando..." : "Guardar contrato"}
-          </button>
+          <FormContent />
         </div>
-
-        {/* Right — preview */}
-        {/* Right — preview */}
         <div className="overflow-y-auto px-10 py-10 bg-surface">
-          <p className="text-xs uppercase tracking-widest text-hint mb-6">Vista previa</p>
-          {preview.split('\n').map((line, i) => {
-            const isSigLine = line.includes('\t');
-            if (isSigLine) {
-              const cols = line.split('\t').filter(s => s.trim() !== '');
-              return (
-                <div key={i} className="grid grid-cols-2 gap-4 mt-1">
-                  {cols.map((col, j) => (
-                    <span key={j} className="font-mono text-sm text-ink">{col}</span>
-                  ))}
-                </div>
-              );
-            }
-            return (
-              <p key={i} className={`font-mono text-sm text-ink ${line === '' ? 'mt-4' : 'mt-0'} leading-relaxed`}>
-                {line || '\u00A0'}
-              </p>
-            );
-          })}
+          <PreviewContent />
         </div>
       </div>
     </div>

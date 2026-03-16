@@ -42,7 +42,7 @@ export default function ContratoDetallePage() {
       .finally(() => setLoading(false));
   }, [id, router]);
 
-async function handleEliminar() {
+  async function handleEliminar() {
     if (!confirm("¿Seguro que querés eliminar este contrato? Esta acción no se puede deshacer.")) return;
     const token = localStorage.getItem("token");
     if (!token) { router.push("/login"); return; }
@@ -73,44 +73,42 @@ async function handleEliminar() {
     }
   }
 
-  async function handleInvite(e: React.FormEvent) {
-  e.preventDefault();
-  const token = localStorage.getItem("token");
-  if (!token) { router.push("/login"); return; }
+  async function handleInvite(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) { router.push("/login"); return; }
 
-  setInviting(true);
-  setInviteError("");
+    setInviting(true);
+    setInviteError("");
 
-  try {
-    console.log("Enviando invite a:", process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001");
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/signatures/invite`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        contract_id: Number(id),
-        firmante_nombre,
-        firmante_email,
-      }),
-    });
-    const data = await res.json();
-    console.log("Respuesta del backend:", data);
-    if (!res.ok) throw new Error(data.error);
-    setInviteSuccess(true);
-    setShowInvite(false);
-    const updated = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/contracts/${id}`, {
-      headers: { "Authorization": `Bearer ${token}` },
-    });
-    const updatedData = await updated.json();
-    setContract(updatedData.contract);
-  } catch (err: unknown) {
-    setInviteError(err instanceof Error ? err.message : "Error al enviar la invitación");
-  } finally {
-    setInviting(false);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/signatures/invite`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          contract_id: Number(id),
+          firmante_nombre,
+          firmante_email,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setInviteSuccess(true);
+      setShowInvite(false);
+      const updated = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"}/contracts/${id}`, {
+        headers: { "Authorization": `Bearer ${token}` },
+      });
+      const updatedData = await updated.json();
+      setContract(updatedData.contract);
+    } catch (err: unknown) {
+      setInviteError(err instanceof Error ? err.message : "Error al enviar la invitación");
+    } finally {
+      setInviting(false);
+    }
   }
-}
 
   if (loading || !contract) {
     return (
@@ -136,7 +134,7 @@ async function handleEliminar() {
     <div className="min-h-screen bg-cream">
 
       {/* Nav */}
-      <nav className="px-12 py-5 border-b border-border flex justify-between items-center bg-cream">
+      <nav className="px-4 sm:px-12 py-5 border-b border-border flex justify-between items-center bg-cream">
         <Link href="/" className="font-serif text-xl tracking-tight text-ink">
           pact<span className="text-green">.ar</span>
         </Link>
@@ -145,7 +143,7 @@ async function handleEliminar() {
         </Link>
       </nav>
 
-      <div className="max-w-3xl mx-auto px-12 py-16">
+      <div className="max-w-3xl mx-auto px-4 sm:px-12 py-8 sm:py-16">
 
         {/* Header */}
         <div className="flex items-center gap-2 mb-4">
@@ -155,14 +153,14 @@ async function handleEliminar() {
           </span>
         </div>
 
-        <div className="flex justify-between items-start mb-2">
-          <h1 className="font-serif text-3xl text-ink">{contract.nombre}</h1>
-          <span className={`text-[10px] font-medium uppercase tracking-widest px-2 py-1 ${estadoStyle[contract.estado] ?? ""}`}>
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-2">
+          <h1 className="font-serif text-2xl sm:text-3xl text-ink">{contract.nombre}</h1>
+          <span className={`text-[10px] font-medium uppercase tracking-widest px-2 py-1 self-start ${estadoStyle[contract.estado] ?? ""}`}>
             {estadoLabel[contract.estado] ?? contract.estado}
           </span>
         </div>
 
-        <p className="text-xs text-hint mb-10">
+        <p className="text-xs text-hint mb-8 sm:mb-10">
           Creado el {new Date(contract.created_at).toLocaleDateString("es-AR", { day: "numeric", month: "long", year: "numeric" })}
         </p>
 
@@ -175,7 +173,7 @@ async function handleEliminar() {
 
         {/* Acciones según estado */}
         {contract.estado === "borrador" && !showInvite && (
-          <div className="flex gap-3 mb-10">
+          <div className="flex flex-wrap gap-3 mb-8 sm:mb-10">
             <button
               onClick={() => setShowInvite(true)}
               className="text-xs font-medium uppercase tracking-widest px-6 py-3 bg-ink text-cream hover:bg-green transition-colors"
@@ -193,7 +191,7 @@ async function handleEliminar() {
         )}
 
         {contract.estado === "pendiente_firma" && (
-          <div className="mb-10">
+          <div className="mb-8 sm:mb-10">
             <button
               onClick={handleRevocar}
               disabled={actionLoading}
@@ -205,7 +203,7 @@ async function handleEliminar() {
         )}
 
         {showInvite && (
-          <form onSubmit={handleInvite} className="border border-border bg-surface p-6 mb-10">
+          <form onSubmit={handleInvite} className="border border-border bg-surface p-4 sm:p-6 mb-8 sm:mb-10">
             <p className="text-xs uppercase tracking-widest text-hint mb-5">Datos del firmante</p>
             <div className="space-y-4 mb-5">
               <div>
@@ -232,7 +230,7 @@ async function handleEliminar() {
               </div>
             </div>
             {inviteError && <p className="text-xs text-red-600 mb-4">{inviteError}</p>}
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               <button
                 type="submit"
                 disabled={inviting}
@@ -252,7 +250,7 @@ async function handleEliminar() {
         )}
 
         {/* Contrato */}
-        <div className="bg-surface border border-border p-10">
+        <div className="bg-surface border border-border p-4 sm:p-10 overflow-x-auto">
           {contract.cuerpo.split('\n').map((line, i) => {
             const isSigLine = line.includes('\t');
             if (isSigLine) {
@@ -260,13 +258,13 @@ async function handleEliminar() {
               return (
                 <div key={i} className="grid grid-cols-2 gap-4 mt-1">
                   {cols.map((col, j) => (
-                    <span key={j} className="font-mono text-sm text-ink">{col}</span>
+                    <span key={j} className="font-mono text-xs sm:text-sm text-ink">{col}</span>
                   ))}
                 </div>
               );
             }
             return (
-              <p key={i} className={`font-mono text-sm text-ink ${line === '' ? 'mt-4' : 'mt-0'} leading-relaxed`}>
+              <p key={i} className={`font-mono text-xs sm:text-sm text-ink ${line === '' ? 'mt-4' : 'mt-0'} leading-relaxed`}>
                 {line || '\u00A0'}
               </p>
             );
