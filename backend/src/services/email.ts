@@ -5,7 +5,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
 // En desarrollo o si el dominio pact.ar no está verificado en Resend,
 // usar el dominio sandbox. En producción, cambiar a noreply@pact.ar.
-const FROM_ADDRESS = process.env.RESEND_FROM || "pact.ar <onboarding@resend.dev>";
+const FROM_ADDRESS = process.env.RESEND_FROM || "pact.ar <noreply@pact.ar>";
 
 async function sendEmail(params: Parameters<typeof resend.emails.send>[0]) {
   const { data, error } = await resend.emails.send(params);
