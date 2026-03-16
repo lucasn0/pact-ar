@@ -20,6 +20,26 @@ function renderCuerpo(cuerpo: string, variables: Record<string, string>): string
 // Todas las rutas requieren auth
 router.use(authMiddleware);
 
+async function checkUser(userId: number): Promise<{ error: string } | { plan: string }> {
+  const result = await db.query(
+    "SELECT email_verified, plan, plan_expires_at FROM users WHERE id = $1",
+    [userId]
+  );
+  const user = result.rows[0];
+
+  if (!user?.email_verified) {
+    return { error: "Debés verificar tu email antes de crear contratos" };
+  }
+
+  // Si el plan Pro venció, bajarlo a free
+  if (user.plan === "pro" && user.plan_expires_at && new Date(user.plan_expires_at) < new Date()) {
+    await db.query("UPDATE users SET plan = 'free' WHERE id = $1", [userId]);
+    user.plan = "free";
+  }
+
+  return { plan: user.plan };
+}
+
 // POST /contracts — crear contrato
 router.post("/", async (req: AuthRequest, res: Response): Promise<void> => {
   const { template_id, nombre, variables } = req.body;
@@ -29,10 +49,9 @@ router.post("/", async (req: AuthRequest, res: Response): Promise<void> => {
     return;
   }
 
-  // Verificar que el email esté confirmado
-  const userCheck = await db.query("SELECT email_verified FROM users WHERE id = $1", [req.userId]);
-  if (!userCheck.rows[0]?.email_verified) {
-    res.status(403).json({ error: "Debés verificar tu email antes de crear contratos" });
+  const userCheck = await checkUser(req.userId!);
+  if ("error" in userCheck) {
+    res.status(403).json({ error: userCheck.error });
     return;
   }
 
@@ -68,9 +87,9 @@ router.post("/custom", async (req: AuthRequest, res: Response): Promise<void> =>
     return;
   }
 
-  const userCheck = await db.query("SELECT email_verified FROM users WHERE id = $1", [req.userId]);
-  if (!userCheck.rows[0]?.email_verified) {
-    res.status(403).json({ error: "Debés verificar tu email antes de crear contratos" });
+  const userCheck = await checkUser(req.userId!);
+  if ("error" in userCheck) {
+    res.status(403).json({ error: userCheck.error });
     return;
   }
 
