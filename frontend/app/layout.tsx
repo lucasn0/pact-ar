@@ -19,6 +19,24 @@ export const metadata: Metadata = {
   title: "pact.ar — Contratos profesionales en minutos",
   description:
     "Creá, enviá y firmá contratos digitales con validez legal en Argentina. Para freelancers y comerciantes independientes.",
+  icons: {
+    icon: "/favicon.svg",
+  },
+  openGraph: {
+    title: "pact.ar — Contratos profesionales en minutos",
+    description: "Creá, enviá y firmá contratos digitales con validez legal en Argentina.",
+    url: "https://pact.ar",
+    siteName: "pact.ar",
+    images: [
+      {
+        url: "https://pact.ar/og-image.svg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "es_AR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
