@@ -43,16 +43,16 @@ const plans = [
 
 export default function Pricing() {
   return (
-    <section id="precios" className="max-w-5xl mx-auto px-12 py-20">
-      <p className="text-xs font-medium uppercase tracking-widest text-hint mb-12">
+    <section id="precios" className="max-w-5xl mx-auto px-4 sm:px-12 py-16 sm:py-20">
+      <p className="text-xs font-medium uppercase tracking-widest text-hint mb-10 sm:mb-12">
         Planes
       </p>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className={`flex flex-col p-8 bg-surface border transition-colors ${
+            className={`flex flex-col p-6 sm:p-8 bg-surface border transition-colors ${
               plan.featured ? "border-ink" : "border-border"
             }`}
           >

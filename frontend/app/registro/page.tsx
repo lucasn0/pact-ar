@@ -42,7 +42,7 @@ export default function RegistroPage() {
   return (
     <div className="min-h-screen bg-cream flex flex-col">
       {/* Header */}
-      <div className="px-12 py-5 border-b border-border">
+      <div className="px-4 sm:px-12 py-5 border-b border-border">
         <Link href="/" className="font-serif text-xl tracking-tight text-ink">
           pact<span className="text-green">.ar</span>
         </Link>
