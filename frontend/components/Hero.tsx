@@ -1,6 +1,12 @@
+"use client";
+
 import Link from "next/link";
 
 export default function Hero() {
+  function scrollToHowItWorks(e: React.MouseEvent) {
+    e.preventDefault();
+    document.getElementById("como-funciona")?.scrollIntoView({ behavior: "smooth" });
+  }
   return (
     <section className="max-w-5xl mx-auto px-4 sm:px-12 py-16 sm:py-28">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16 items-center">
@@ -31,12 +37,13 @@ export default function Hero() {
             >
               Empezar gratis
             </Link>
-            <Link
+            <a
               href="#como-funciona"
+              onClick={scrollToHowItWorks}
               className="text-sm text-muted underline underline-offset-4 hover:text-ink transition-colors"
             >
               Ver cómo funciona
-            </Link>
+            </a>
           </div>
         </div>
 
