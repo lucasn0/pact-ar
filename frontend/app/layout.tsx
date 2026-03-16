@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "pact.ar",
     images: [
       {
-        url: "https://pact.ar/og-image.svg",
+        url: "https://pact.ar/og-image.png",
         width: 1200,
         height: 630,
       },
