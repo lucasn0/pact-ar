@@ -12,7 +12,7 @@ const steps = [
   {
     num: "03",
     title: "Firmá y listo",
-    desc: "Invitás a la otra parte por mail. Firma en un click con OTP. Todo queda registrado con timestamp y validez legal.",
+    desc: "Invitás a la otra parte por mail. Firma en un click desde su email. Todo queda registrado con timestamp, IP y validez legal.",
   },
 ];
 
