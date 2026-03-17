@@ -20,6 +20,8 @@ function renderCuerpo(cuerpo: string, variables: Record<string, string>): string
 // Todas las rutas requieren auth
 router.use(authMiddleware);
 
+const FREE_MONTHLY_LIMIT = 3;
+
 async function checkUser(userId: number): Promise<{ error: string } | { plan: string }> {
   const result = await db.query(
     "SELECT email_verified, plan, plan_expires_at FROM users WHERE id = $1",
@@ -35,6 +37,19 @@ async function checkUser(userId: number): Promise<{ error: string } | { plan: st
   if (user.plan === "pro" && user.plan_expires_at && new Date(user.plan_expires_at) < new Date()) {
     await db.query("UPDATE users SET plan = 'free' WHERE id = $1", [userId]);
     user.plan = "free";
+  }
+
+  // Chequear límite mensual del plan free
+  if (user.plan === "free") {
+    const countResult = await db.query(
+      `SELECT COUNT(*) FROM contracts
+       WHERE user_id = $1
+         AND date_trunc('month', created_at) = date_trunc('month', NOW())`,
+      [userId]
+    );
+    if (parseInt(countResult.rows[0].count) >= FREE_MONTHLY_LIMIT) {
+      return { error: "Alcanzaste el límite de 3 contratos por mes del plan Free. Actualizá a Pro para contratos ilimitados." };
+    }
   }
 
   return { plan: user.plan };
