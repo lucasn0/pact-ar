@@ -203,16 +203,16 @@ export default function EditorPage() {
 
       {/* Mobile content */}
       <div className="sm:hidden flex-1 overflow-y-auto px-4 py-8 bg-cream">
-        {mobileTab === "form" ? <FormContent /> : <div className="bg-surface p-4"><PreviewContent /></div>}
+        {mobileTab === "form" ? FormContent() : <div className="bg-surface p-4">{PreviewContent()}</div>}
       </div>
 
       {/* Desktop split view */}
       <div className="hidden sm:grid grid-cols-2 flex-1" style={{ height: "calc(100vh - 65px)" }}>
         <div className="border-r border-border overflow-y-auto px-10 py-10">
-          <FormContent />
+          {FormContent()}
         </div>
         <div className="overflow-y-auto px-10 py-10 bg-surface">
-          <PreviewContent />
+          {PreviewContent()}
         </div>
       </div>
     </div>
