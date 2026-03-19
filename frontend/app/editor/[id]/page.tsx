@@ -89,95 +89,6 @@ export default function EditorPage() {
     );
   }
 
-  const PreviewContent = () => (
-    <>
-      <p className="text-xs uppercase tracking-widest text-hint mb-6">Vista previa</p>
-      {preview.split('\n').map((line, i) => {
-        const isSigLine = line.includes('\t');
-        if (isSigLine) {
-          const cols = line.split('\t').filter(s => s.trim() !== '');
-          return (
-            <div key={i} className="grid grid-cols-2 gap-4 mt-1">
-              {cols.map((col, j) => (
-                <span key={j} className="font-mono text-sm text-ink">{col}</span>
-              ))}
-            </div>
-          );
-        }
-        return (
-          <p key={i} className={`font-mono text-sm text-ink ${line === '' ? 'mt-4' : 'mt-0'} leading-relaxed`}>
-            {line || '\u00A0'}
-          </p>
-        );
-      })}
-    </>
-  );
-
-  const FormContent = () => (
-    <>
-      <div className="flex items-center gap-2 mb-4">
-        <span className="w-6 h-px bg-green" />
-        <span className="text-xs font-medium uppercase tracking-widest text-green">Editor</span>
-      </div>
-      <h1 className="font-serif text-2xl text-ink mb-1">{template.nombre}</h1>
-      <p className="text-sm text-muted font-light mb-8">{template.descripcion}</p>
-
-      <div className="mb-6">
-        <label className="block text-xs uppercase tracking-widest text-hint mb-2">
-          Nombre del contrato
-        </label>
-        <input
-          type="text"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
-          placeholder="Ej: Contrato con cliente ABC"
-        />
-      </div>
-
-      <hr className="border-border mb-6" />
-
-      <div className="space-y-5">
-        {template.variables.map((v) => (
-          <div key={v.id}>
-            <label className="block text-xs uppercase tracking-widest text-hint mb-2">
-              {v.label}
-            </label>
-            {v.tipo === "textarea" ? (
-              <textarea
-                value={values[v.id] || ""}
-                onChange={(e) => handleChange(v.id, e.target.value)}
-                rows={3}
-                placeholder={v.placeholder || ""}
-                className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors resize-none"
-              />
-            ) : (
-              <input
-                type={v.tipo === "fecha" ? "date" : "text"}
-                value={values[v.id] || ""}
-                onChange={(e) => handleChange(v.id, e.target.value)}
-                placeholder={v.tipo !== "fecha" ? (v.placeholder || "") : undefined}
-                className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
-              />
-            )}
-          </div>
-        ))}
-      </div>
-
-      {error && (
-        <p className="mt-6 text-sm text-red-600">{error}</p>
-      )}
-
-      <button
-        onClick={handleSave}
-        disabled={saving}
-        className="mt-8 w-full bg-ink text-cream text-sm uppercase tracking-widest py-4 hover:bg-green transition-colors disabled:opacity-50"
-      >
-        {saving ? "Guardando..." : "Guardar contrato"}
-      </button>
-    </>
-  );
-
   return (
     <div className="min-h-screen bg-cream">
       {/* Header */}
@@ -208,15 +119,94 @@ export default function EditorPage() {
 
       {/* Desktop: two columns / Mobile: tabs */}
       <div className="max-w-7xl mx-auto sm:grid sm:grid-cols-2 sm:divide-x sm:divide-border">
-        {/* Form */}
+
+        {/* Columna izquierda: formulario */}
         <div className={`px-4 sm:px-12 py-8 sm:py-16 ${mobileTab !== "form" ? "hidden sm:block" : ""}`}>
-          <FormContent />
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-6 h-px bg-green" />
+            <span className="text-xs font-medium uppercase tracking-widest text-green">Editor</span>
+          </div>
+          <h1 className="font-serif text-2xl text-ink mb-1">{template.nombre}</h1>
+          <p className="text-sm text-muted font-light mb-8">{template.descripcion}</p>
+
+          <div className="mb-6">
+            <label className="block text-xs uppercase tracking-widest text-hint mb-2">
+              Nombre del contrato
+            </label>
+            <input
+              type="text"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
+              placeholder="Ej: Contrato con cliente ABC"
+            />
+          </div>
+
+          <hr className="border-border mb-6" />
+
+          <div className="space-y-5">
+            {template.variables.map((v) => (
+              <div key={v.id}>
+                <label className="block text-xs uppercase tracking-widest text-hint mb-2">
+                  {v.label}
+                </label>
+                {v.tipo === "textarea" ? (
+                  <textarea
+                    value={values[v.id] || ""}
+                    onChange={(e) => handleChange(v.id, e.target.value)}
+                    rows={3}
+                    placeholder={v.placeholder || ""}
+                    className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors resize-none"
+                  />
+                ) : (
+                  <input
+                    type={v.tipo === "fecha" ? "date" : "text"}
+                    value={values[v.id] || ""}
+                    onChange={(e) => handleChange(v.id, e.target.value)}
+                    placeholder={v.tipo !== "fecha" ? (v.placeholder || "") : undefined}
+                    className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+
+          {error && (
+            <p className="mt-6 text-sm text-red-600">{error}</p>
+          )}
+
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="mt-8 w-full bg-ink text-cream text-sm uppercase tracking-widest py-4 hover:bg-green transition-colors disabled:opacity-50"
+          >
+            {saving ? "Guardando..." : "Guardar contrato"}
+          </button>
         </div>
 
-        {/* Preview */}
+        {/* Columna derecha: vista previa */}
         <div className={`px-4 sm:px-12 py-8 sm:py-16 ${mobileTab !== "preview" ? "hidden sm:block" : ""}`}>
-          <PreviewContent />
+          <p className="text-xs uppercase tracking-widest text-hint mb-6">Vista previa</p>
+          {preview.split('\n').map((line, i) => {
+            const isSigLine = line.includes('\t');
+            if (isSigLine) {
+              const cols = line.split('\t').filter(s => s.trim() !== '');
+              return (
+                <div key={i} className="grid grid-cols-2 gap-4 mt-1">
+                  {cols.map((col, j) => (
+                    <span key={j} className="font-mono text-sm text-ink">{col}</span>
+                  ))}
+                </div>
+              );
+            }
+            return (
+              <p key={i} className={`font-mono text-sm text-ink ${line === '' ? 'mt-4' : 'mt-0'} leading-relaxed`}>
+                {line || '\u00A0'}
+              </p>
+            );
+          })}
         </div>
+
       </div>
     </div>
   );
