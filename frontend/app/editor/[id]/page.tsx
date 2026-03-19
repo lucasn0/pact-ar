@@ -9,6 +9,7 @@ interface Variable {
   id: string;
   label: string;
   tipo: "texto" | "textarea" | "fecha";
+  placeholder?: string;
 }
 
 interface Template {
@@ -147,6 +148,7 @@ export default function EditorPage() {
                 value={values[v.id] || ""}
                 onChange={(e) => handleChange(v.id, e.target.value)}
                 rows={3}
+                placeholder={v.placeholder || ""}
                 className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors resize-none"
               />
             ) : (
@@ -154,6 +156,7 @@ export default function EditorPage() {
                 type={v.tipo === "fecha" ? "date" : "text"}
                 value={values[v.id] || ""}
                 onChange={(e) => handleChange(v.id, e.target.value)}
+                placeholder={v.tipo !== "fecha" ? (v.placeholder || "") : undefined}
                 className="w-full bg-surface border border-border px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors"
               />
             )}
@@ -161,12 +164,14 @@ export default function EditorPage() {
         ))}
       </div>
 
-      {error && <p className="text-xs text-red-600 mt-4">{error}</p>}
+      {error && (
+        <p className="mt-6 text-sm text-red-600">{error}</p>
+      )}
 
       <button
         onClick={handleSave}
-        disabled={saving || !nombre}
-        className="w-full mt-8 bg-ink text-cream text-xs font-medium uppercase tracking-widest py-3 hover:bg-green transition-colors disabled:opacity-50"
+        disabled={saving}
+        className="mt-8 w-full bg-ink text-cream text-sm uppercase tracking-widest py-4 hover:bg-green transition-colors disabled:opacity-50"
       >
         {saving ? "Guardando..." : "Guardar contrato"}
       </button>
@@ -174,9 +179,9 @@ export default function EditorPage() {
   );
 
   return (
-    <div className="min-h-screen bg-cream flex flex-col">
+    <div className="min-h-screen bg-cream">
       {/* Header */}
-      <div className="px-4 sm:px-12 py-5 border-b border-border flex justify-between items-center flex-shrink-0">
+      <div className="px-4 sm:px-12 py-5 border-b border-border flex justify-between items-center bg-cream">
         <Link href="/" className="font-serif text-xl tracking-tight text-ink">
           pact<span className="text-green">.ar</span>
         </Link>
@@ -185,34 +190,32 @@ export default function EditorPage() {
         </Link>
       </div>
 
-      {/* Mobile tabs */}
-      <div className="sm:hidden flex border-b border-border flex-shrink-0">
+      {/* Mobile tab switcher */}
+      <div className="sm:hidden flex border-b border-border">
         <button
           onClick={() => setMobileTab("form")}
-          className={`flex-1 py-3 text-xs uppercase tracking-widest transition-colors ${mobileTab === "form" ? "text-ink border-b-2 border-ink font-medium" : "text-hint"}`}
+          className={`flex-1 py-3 text-xs uppercase tracking-widest transition-colors ${mobileTab === "form" ? "text-ink border-b-2 border-ink" : "text-hint"}`}
         >
           Formulario
         </button>
         <button
           onClick={() => setMobileTab("preview")}
-          className={`flex-1 py-3 text-xs uppercase tracking-widest transition-colors ${mobileTab === "preview" ? "text-ink border-b-2 border-ink font-medium" : "text-hint"}`}
+          className={`flex-1 py-3 text-xs uppercase tracking-widest transition-colors ${mobileTab === "preview" ? "text-ink border-b-2 border-ink" : "text-hint"}`}
         >
           Vista previa
         </button>
       </div>
 
-      {/* Mobile content */}
-      <div className="sm:hidden flex-1 overflow-y-auto px-4 py-8 bg-cream">
-        {mobileTab === "form" ? FormContent() : <div className="bg-surface p-4">{PreviewContent()}</div>}
-      </div>
-
-      {/* Desktop split view */}
-      <div className="hidden sm:grid grid-cols-2 flex-1" style={{ height: "calc(100vh - 65px)" }}>
-        <div className="border-r border-border overflow-y-auto px-10 py-10">
-          {FormContent()}
+      {/* Desktop: two columns / Mobile: tabs */}
+      <div className="max-w-7xl mx-auto sm:grid sm:grid-cols-2 sm:divide-x sm:divide-border">
+        {/* Form */}
+        <div className={`px-4 sm:px-12 py-8 sm:py-16 ${mobileTab !== "form" ? "hidden sm:block" : ""}`}>
+          <FormContent />
         </div>
-        <div className="overflow-y-auto px-10 py-10 bg-surface">
-          {PreviewContent()}
+
+        {/* Preview */}
+        <div className={`px-4 sm:px-12 py-8 sm:py-16 ${mobileTab !== "preview" ? "hidden sm:block" : ""}`}>
+          <PreviewContent />
         </div>
       </div>
     </div>
