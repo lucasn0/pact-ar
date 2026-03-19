@@ -3,14 +3,14 @@
   "nombre": "Acuerdo de confidencialidad (NDA)",
   "descripcion": "Para proteger información sensible antes de una negociación, proyecto o colaboración.",
   "variables": [
-    { "id": "parte_a_nombre", "label": "Nombre completo o razón social (Parte A)", "tipo": "texto" },
-    { "id": "parte_a_dni", "label": "DNI o CUIT (Parte A)", "tipo": "texto" },
-    { "id": "parte_b_nombre", "label": "Nombre completo o razón social (Parte B)", "tipo": "texto" },
-    { "id": "parte_b_dni", "label": "DNI o CUIT (Parte B)", "tipo": "texto" },
-    { "id": "objeto", "label": "Propósito o contexto de la confidencialidad", "tipo": "textarea" },
-    { "id": "duracion", "label": "Duración del acuerdo", "tipo": "texto" },
-    { "id": "lugar", "label": "Ciudad", "tipo": "texto" },
-    { "id": "fecha", "label": "Fecha del acuerdo", "tipo": "fecha" }
+    { "id": "parte_a_nombre", "label": "Nombre completo o razón social (Parte A)", "tipo": "texto", "placeholder": "Ej: Lucía Ramírez" },
+    { "id": "parte_a_dni", "label": "DNI o CUIT (Parte A)", "tipo": "texto", "placeholder": "Ej: 28.901.234" },
+    { "id": "parte_b_nombre", "label": "Nombre completo o razón social (Parte B)", "tipo": "texto", "placeholder": "Ej: Tech Startup SA" },
+    { "id": "parte_b_dni", "label": "DNI o CUIT (Parte B)", "tipo": "texto", "placeholder": "Ej: 30-71234567-8" },
+    { "id": "objeto", "label": "Propósito o contexto de la confidencialidad", "tipo": "textarea", "placeholder": "Ej: Evaluación de una posible sociedad comercial para el desarrollo de una aplicación de gestión de turnos médicos." },
+    { "id": "duracion", "label": "Duración del acuerdo", "tipo": "texto", "placeholder": "Ej: 2 años" },
+    { "id": "lugar", "label": "Ciudad", "tipo": "texto", "placeholder": "Ej: Rosario" },
+    { "id": "fecha", "label": "Fecha del acuerdo", "tipo": "fecha", "placeholder": "" }
   ],
   "cuerpo": "ACUERDO DE CONFIDENCIALIDAD\n\nEn la ciudad de {{lugar}}, a los {{fecha}}, entre:\n\nPARTE A: {{parte_a_nombre}}, DNI/CUIT {{parte_a_dni}};\n\nPARTE B: {{parte_b_nombre}}, DNI/CUIT {{parte_b_dni}};\n\nAmbas partes acuerdan el presente acuerdo de confidencialidad bajo las siguientes cláusulas:\n\nPRIMERA — OBJETO: Las partes intercambiarán información confidencial en el marco de: {{objeto}}.\n\nSEGUNDA — INFORMACIÓN CONFIDENCIAL: Se considera información confidencial todo dato, documento, conocimiento técnico, comercial o de cualquier otra naturaleza que una parte divulgue a la otra con motivo del presente acuerdo.\n\nTERCERA — OBLIGACIONES: Cada parte se compromete a: (a) no divulgar la información confidencial a terceros; (b) utilizarla exclusivamente para los fines del presente acuerdo; (c) protegerla con el mismo cuidado que dispensa a su propia información confidencial.\n\nCUARTA — EXCEPCIONES: Las obligaciones del presente acuerdo no aplican a información que sea de dominio público, que la parte receptora ya conociera con anterioridad, o que deba divulgarse por orden judicial o legal.\n\nQUINTA — DURACIÓN: El presente acuerdo tendrá vigencia por {{duracion}} a partir de la fecha de firma.\n\nSEXTA — JURISDICCIÓN: Para cualquier controversia, las partes se someten a los tribunales ordinarios de la ciudad de {{lugar}}.\n\nEn prueba de conformidad, las partes firman el presente acuerdo.\n\n_______________________________\t\t_______________________________\n{{parte_a_nombre}}\t\t\t\t{{parte_b_nombre}}\nParte A\t\t\t\t\t\tParte B"
 }

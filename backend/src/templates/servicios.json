@@ -3,17 +3,17 @@
   "nombre": "Locación de servicios",
   "descripcion": "Para freelancers y prestadores que ofrecen un servicio a un cliente.",
   "variables": [
-    { "id": "prestador_nombre", "label": "Nombre completo del prestador", "tipo": "texto" },
-    { "id": "prestador_dni", "label": "DNI del prestador", "tipo": "texto" },
-    { "id": "cliente_nombre", "label": "Nombre completo o razón social del cliente", "tipo": "texto" },
-    { "id": "cliente_dni", "label": "DNI o CUIT del cliente", "tipo": "texto" },
-    { "id": "servicio_descripcion", "label": "Descripción del servicio", "tipo": "textarea" },
-    { "id": "monto", "label": "Monto total", "tipo": "texto" },
-    { "id": "moneda", "label": "Moneda (ARS / USD)", "tipo": "texto" },
-    { "id": "forma_pago", "label": "Forma de pago", "tipo": "texto" },
-    { "id": "plazo", "label": "Plazo de entrega o duración", "tipo": "texto" },
-    { "id": "lugar", "label": "Ciudad", "tipo": "texto" },
-    { "id": "fecha", "label": "Fecha del contrato", "tipo": "fecha" }
+    { "id": "prestador_nombre", "label": "Nombre completo del prestador", "tipo": "texto", "placeholder": "Ej: María González" },
+    { "id": "prestador_dni", "label": "DNI del prestador", "tipo": "texto", "placeholder": "Ej: 30.456.789" },
+    { "id": "cliente_nombre", "label": "Nombre completo o razón social del cliente", "tipo": "texto", "placeholder": "Ej: Juan Pérez o Empresa SRL" },
+    { "id": "cliente_dni", "label": "DNI o CUIT del cliente", "tipo": "texto", "placeholder": "Ej: 20-12345678-9" },
+    { "id": "servicio_descripcion", "label": "Descripción del servicio", "tipo": "textarea", "placeholder": "Ej: Diseño y desarrollo de sitio web institucional con hasta 5 secciones, formulario de contacto y adaptación mobile." },
+    { "id": "monto", "label": "Monto total", "tipo": "texto", "placeholder": "Ej: 150.000" },
+    { "id": "moneda", "label": "Moneda", "tipo": "texto", "placeholder": "Ej: ARS" },
+    { "id": "forma_pago", "label": "Forma de pago", "tipo": "texto", "placeholder": "Ej: 50% al inicio y 50% a la entrega" },
+    { "id": "plazo", "label": "Plazo de entrega o duración", "tipo": "texto", "placeholder": "Ej: 30 días hábiles desde el inicio" },
+    { "id": "lugar", "label": "Ciudad", "tipo": "texto", "placeholder": "Ej: Buenos Aires" },
+    { "id": "fecha", "label": "Fecha del contrato", "tipo": "fecha", "placeholder": "" }
   ],
   "cuerpo": "CONTRATO DE LOCACIÓN DE SERVICIOS\n\nEn la ciudad de {{lugar}}, a los {{fecha}}, entre:\n\nPRESTADOR: {{prestador_nombre}}, DNI {{prestador_dni}}, en adelante \"el Prestador\";\n\nCLIENTE: {{cliente_nombre}}, DNI/CUIT {{cliente_dni}}, en adelante \"el Cliente\";\n\nSe acuerda el presente contrato de locación de servicios bajo las siguientes cláusulas:\n\nPRIMERA — OBJETO: El Prestador se compromete a realizar el siguiente servicio: {{servicio_descripcion}}.\n\nSEGUNDA — PLAZO: El servicio será entregado o prestado en el siguiente plazo: {{plazo}}.\n\nTERCERA — PRECIO Y FORMA DE PAGO: El Cliente abonará la suma de {{moneda}} {{monto}}, de la siguiente manera: {{forma_pago}}.\n\nCUARTA — OBLIGACIONES DEL PRESTADOR: El Prestador se compromete a ejecutar el servicio con diligencia y profesionalismo, respetando los plazos acordados.\n\nQUINTA — OBLIGACIONES DEL CLIENTE: El Cliente se compromete a brindar la información y los recursos necesarios para la ejecución del servicio, y a abonar el precio en los términos pactados.\n\nSEXTA — CONFIDENCIALIDAD: Ambas partes se comprometen a mantener reserva sobre la información confidencial que se intercambie con motivo del presente contrato.\n\nSÉPTIMA — JURISDICCIÓN: Para cualquier controversia derivada del presente contrato, las partes se someten a los tribunales ordinarios de la ciudad de {{lugar}}.\n\nEn prueba de conformidad, las partes firman el presente contrato.\n\n_______________________________\t\t_______________________________\n{{prestador_nombre}}\t\t\t\t{{cliente_nombre}}\nPrestador\t\t\t\t\tCliente"
 }
