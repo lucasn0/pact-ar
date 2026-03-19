@@ -71,7 +71,7 @@ export default function EditorPage() {
     setError("");
 
     try {
-      const data = await apiPost("/contracts", { template_id: templateId, nombre, variables: values });
+      const data = await apiPost("/contracts", { template_id: templateId, nombre, variables: values }, token);
       router.push(`/contratos/${data.contract.id}`);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Error al guardar");
