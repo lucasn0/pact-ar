@@ -117,7 +117,7 @@ router.post("/firmar/:token", async (req: Request, res: Response): Promise<void>
   try {
     const result = await db.query(
       `SELECT s.id, s.firmante_nombre, s.firmante_email, s.estado, s.contract_id,
-              c.nombre, u.email AS emisor_email
+              c.nombre, c.cuerpo, u.email AS emisor_email
        FROM signatures s
        JOIN contracts c ON s.contract_id = c.id
        JOIN users u ON c.user_id = u.id
@@ -155,6 +155,7 @@ router.post("/firmar/:token", async (req: Request, res: Response): Promise<void>
         email: sig.firmante_email,
         nombre: sig.firmante_nombre,
         contrato_nombre: sig.nombre,
+        cuerpo: sig.cuerpo,
       });
     } catch (emailErr) {
       console.error("[signatures/firmar] Fallo al enviar confirmación al firmante:", emailErr);
@@ -167,6 +168,7 @@ router.post("/firmar/:token", async (req: Request, res: Response): Promise<void>
         firmante_nombre: sig.firmante_nombre,
         firmante_email: sig.firmante_email,
         contrato_nombre: sig.nombre,
+        cuerpo: sig.cuerpo,
       });
     } catch (emailErr) {
       console.error("[signatures/firmar] Fallo al notificar al emisor:", emailErr);

@@ -119,6 +119,7 @@ export async function sendSignatureNotificationToEmisor(params: {
   firmante_nombre: string;
   firmante_email: string;
   contrato_nombre: string;
+  cuerpo: string;
 }) {
   await sendEmail({
     from: FROM_ADDRESS,
@@ -142,6 +143,9 @@ export async function sendSignatureNotificationToEmisor(params: {
           <p style="font-size: 14px; color: #2C5F2E; margin: 0;">✓ Firma registrada con fecha y hora</p>
         </div>
 
+        <p style="font-size: 14px; margin-top: 32px; font-weight: bold;">Copia del contrato:</p>
+        <div style="background: #FFFFFF; border: 1px solid #D6D3CC; padding: 20px; margin-bottom: 24px; font-family: monospace; font-size: 12px; white-space: pre-wrap; color: #1C1C1A; line-height: 1.5;">${params.cuerpo}</div>
+
         <p style="font-size: 12px; color: #888780; margin-top: 32px; line-height: 1.6;">
           Podés ver el contrato firmado desde tu dashboard en pact.ar.<br/>
           Válido bajo Ley 25.506 y CCyC art. 288.
@@ -155,6 +159,7 @@ export async function sendSignatureConfirmation(params: {
   email: string;
   nombre: string;
   contrato_nombre: string;
+  cuerpo: string;
 }) {
   await sendEmail({
     from: FROM_ADDRESS,
@@ -173,6 +178,9 @@ export async function sendSignatureConfirmation(params: {
         <div style="background: #EAF3DE; border: 1px solid #2C5F2E; padding: 16px 24px; margin: 24px 0;">
           <p style="font-size: 14px; color: #2C5F2E; margin: 0;">✓ Firma registrada con fecha y hora</p>
         </div>
+
+        <p style="font-size: 14px; margin-top: 32px; font-weight: bold;">Copia del contrato:</p>
+        <div style="background: #FFFFFF; border: 1px solid #D6D3CC; padding: 20px; margin-bottom: 24px; font-family: monospace; font-size: 12px; white-space: pre-wrap; color: #1C1C1A; line-height: 1.5;">${params.cuerpo}</div>
 
         <p style="font-size: 12px; color: #888780; margin-top: 32px; line-height: 1.6;">
           Guardá este email como comprobante de tu firma.<br/>
