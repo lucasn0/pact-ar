@@ -7,6 +7,28 @@ const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 // usar el dominio sandbox. En producción, cambiar a noreply@pact.ar.
 const FROM_ADDRESS = process.env.RESEND_FROM || "pact.ar <noreply@pact.ar>";
 
+function escapeHtml(unsafe: string) {
+  return (unsafe || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function formatContractForEmail(cuerpo: string): string {
+  return cuerpo.split('\n').map(line => {
+    if (line.includes('\t')) {
+      const cols = line.split('\t').filter(s => s.trim() !== '');
+      const tds = cols.map(col => 
+        `<td width="${Math.floor(100 / cols.length)}%" valign="top" style="font-family: monospace; font-size: 12px; color: #1C1C1A; padding-right: 8px; word-break: break-all;">${escapeHtml(col)}</td>`
+      ).join('');
+      return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 4px; table-layout: fixed;"><tr>${tds}</tr></table>`;
+    }
+    return `<div style="font-family: monospace; font-size: 12px; color: #1C1C1A; margin-top: ${line === '' ? '14px' : '0'}; line-height: 1.5; word-wrap: break-word;">${escapeHtml(line) || '&nbsp;'}</div>`;
+  }).join('');
+}
+
 async function sendEmail(params: Parameters<typeof resend.emails.send>[0]) {
   const { data, error } = await resend.emails.send(params);
   if (error) {
@@ -144,7 +166,9 @@ export async function sendSignatureNotificationToEmisor(params: {
         </div>
 
         <p style="font-size: 14px; margin-top: 32px; font-weight: bold;">Copia del contrato:</p>
-        <div style="background: #FFFFFF; border: 1px solid #D6D3CC; padding: 20px; margin-bottom: 24px; font-family: monospace; font-size: 12px; white-space: pre-wrap; color: #1C1C1A; line-height: 1.5;">${params.cuerpo}</div>
+        <div style="background: #FFFFFF; border: 1px solid #D6D3CC; padding: 20px; margin-bottom: 24px; overflow-x: hidden;">
+          ${formatContractForEmail(params.cuerpo)}
+        </div>
 
         <p style="font-size: 12px; color: #888780; margin-top: 32px; line-height: 1.6;">
           Podés ver el contrato firmado desde tu dashboard en pact.ar.<br/>
@@ -180,7 +204,9 @@ export async function sendSignatureConfirmation(params: {
         </div>
 
         <p style="font-size: 14px; margin-top: 32px; font-weight: bold;">Copia del contrato:</p>
-        <div style="background: #FFFFFF; border: 1px solid #D6D3CC; padding: 20px; margin-bottom: 24px; font-family: monospace; font-size: 12px; white-space: pre-wrap; color: #1C1C1A; line-height: 1.5;">${params.cuerpo}</div>
+        <div style="background: #FFFFFF; border: 1px solid #D6D3CC; padding: 20px; margin-bottom: 24px; overflow-x: hidden;">
+          ${formatContractForEmail(params.cuerpo)}
+        </div>
 
         <p style="font-size: 12px; color: #888780; margin-top: 32px; line-height: 1.6;">
           Guardá este email como comprobante de tu firma.<br/>
